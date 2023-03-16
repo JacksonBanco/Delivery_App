@@ -1,6 +1,6 @@
 import 'package:actual/common/model/cursor_pagination_model.dart';
+import 'package:actual/common/utils/pagination_utils.dart';
 import 'package:actual/restaurant/component/restaurant_card.dart';
-import 'package:actual/restaurant/model/restaurant_model.dart';
 import 'package:actual/restaurant/provider/restaurant_provider.dart';
 import 'package:actual/restaurant/view/restaurant_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ class RestaurantScreen extends ConsumerStatefulWidget {
 
 class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
   final ScrollController controller = ScrollController();
+
 /*  //api서버로부터 20개를 받아오는 data(list)값을 반환해주슨 함수
   Future<List<RestaurantModel>> paginateRestaurant(WidgetRef ref) async {
     final dio = ref.watch(dioProvider);
@@ -36,11 +37,18 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
   }
 
   void scrollListener() {
+    PaginationUtils.paginate(
+      controller: controller,
+      provider: ref.read(
+        restaurantProvider.notifier,
+      ),
+    );
+
     //현재 위치가 최대 스크롤길이보다 조금 덜 되는 위치까지 왔다면
     //새로운 데이터를 추가요청하는 함수 여기서 hasMore이 true냐 false냐 이거는 provider파일에
     //다 만들어놈
     // 현재 위치 > 최대스크롤한 위치
-    if (controller.offset > controller.position.maxScrollExtent) {
+    if (controller.offset > controller.position.maxScrollExtent - 300) {
       ref.read(restaurantProvider.notifier).paginate(
           fetchMore: true //paginate()에 아무것도 안넣으면 처음부터 로딩 그래서 fetchMore
           );
