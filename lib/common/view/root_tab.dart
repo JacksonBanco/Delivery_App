@@ -1,10 +1,13 @@
 import 'package:actual/common/const/colors.dart';
 import 'package:actual/common/layout/default_layout.dart';
-import 'package:actual/product/view/product_tab.dart';
+import 'package:actual/product/view/product_screen.dart';
 import 'package:actual/restaurant/view/restaurant_screen.dart';
+import 'package:actual/user/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class RootTab extends StatefulWidget {
+  static String get routeName => 'home';
+
   const RootTab({Key? key}) : super(key: key);
 
   @override
@@ -48,14 +51,14 @@ class _RootTabState extends State<RootTab> with  SingleTickerProviderStateMixin{
         controller: controller,
         children: [
           RestaurantScreen(),
-          ProductTab(),
+          ProductScreen(
+
+          ),
           Container(
             child: Text('order'),
           ),
-          Container(
-            child: Text('profile'),
-          ),
-        ]
+          ProfileScreen(),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: PRIMARY_COlOR,

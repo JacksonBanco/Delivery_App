@@ -7,11 +7,15 @@ import 'package:actual/common/const/data.dart';
 import 'package:actual/common/layout/default_layout.dart';
 import 'package:actual/common/secure_storage/secure_storage.dart';
 import 'package:actual/common/view/root_tab.dart';
+import 'package:actual/user/model/user_model.dart';
+import 'package:actual/user/provider/user_me_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'login';
+
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
@@ -24,8 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dio = Dio();
-
+    final state = ref.watch(userMeProvider);
 
     //localHost 에뮬레이터 기준
     final emulatorIp = '10.0.2.2:3000';
@@ -86,14 +89,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () async {
-                          //ID:비밀번호
+                      //로그인 도중 로그인 버튼 못누르게 하기
+                      onPressed: state is UserModelLoading ? null :
+                          () async {
+                        ref.read(userMeProvider.notifier).login(
+                              username: username,
+                              password: password,
+                            );
+
+                        /* //ID:비밀번호
                           final rawString = '$username:$password';
 
                           //Base 64 인코딩 하는법 그냥 외우기
                           Codec<String, String> stringToBase64 = utf8.fuse(
                               base64);
-
 
                           String token = stringToBase64.encode(rawString);
 
@@ -117,7 +126,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           Navigator.of(context).push(
                             MaterialPageRoute(builder: (_) => RootTab(),
                             ),
-                        );
+                        );*/
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: PRIMARY_COlOR,
@@ -128,8 +137,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       width: 12,
                     ),
                     TextButton(
-                      onPressed: () async{
-                      },
+                      onPressed: () async {},
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.black,
                       ),
@@ -152,7 +160,7 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      '환영합니다',
+      'Welcome To Delivery World',
       style: TextStyle(
         fontSize: 34,
         fontWeight: FontWeight.w500,
@@ -168,7 +176,7 @@ class _SubTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      '이메일과 비밀번호를 입력해서 로그인해주세요! \n 오늘은 성공적인 주문이 되길 :)',
+      'Please enter your email and password and log in! \n Have a delicious meal! :)',
       style: TextStyle(
         fontSize: 16,
         color: BODY_TEXT_COLOR,

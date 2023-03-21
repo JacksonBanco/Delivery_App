@@ -20,7 +20,7 @@ class ProductModel implements IModelWithId{
   //상품 가격
   final int price;
   //레스토랑 정보 꼭 있어야되는이유는? 상품을 눌렀을경우 상품상세페이지로 이동하기때문에 거기정보를 받아오기위해서
-  final RestaurantModel Restaurant;
+  final RestaurantModel restaurant;
 
   ProductModel({
     required this.id,
@@ -28,7 +28,7 @@ class ProductModel implements IModelWithId{
     required this.imgUrl,
     required this.name,
     required this.price,
-    required this.Restaurant,
+    required this.restaurant,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
