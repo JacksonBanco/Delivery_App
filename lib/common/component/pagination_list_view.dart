@@ -95,38 +95,46 @@ class _PaginationListViewState<T extends IModelWithId> extends ConsumerState<Pag
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: ListView.separated(
-        controller: controller,
-        itemCount: cp.data.length + 1, //레스토랑의 정보가 들어잇음
-        itemBuilder: (_, index) {
-          if (index == cp.data.length) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 8.0,
-              ),
-              child: Center(
-                child: cp is CursorPaginationRefetchingMore
-                    ? CircularProgressIndicator()
-                    : Text('마지막 정보입니다'),
-              ),
+      child: RefreshIndicator(
+        onRefresh: () async{
+          ref.read(widget.provider.notifier).paginate(
+            forceRefetch: true,
+          );
+        },
+        child: ListView.separated(
+          physics: AlwaysScrollableScrollPhysics(),
+          controller: controller,
+          itemCount: cp.data.length + 1, //레스토랑의 정보가 들어잇음
+          itemBuilder: (_, index) {
+            if (index == cp.data.length) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Center(
+                  child: cp is CursorPaginationRefetchingMore
+                      ? CircularProgressIndicator()
+                      : Text('마지막 정보입니다'),
+                ),
+              );
+            }
+            final pItem = cp.data[index];
+
+            //일반화에서 위젯의 렌더링
+            return widget.itemBuilder(
+              context,
+              index,
+              pItem,
             );
-          }
-          final pItem = cp.data[index];
+          },
 
-          //일반화에서 위젯의 렌더링
-          return widget.itemBuilder(
-            context,
-            index,
-            pItem,
-          );
-        },
-
-        separatorBuilder: (_, index) {
-          return SizedBox(
-            height: 16.0,
-          );
-        },
+          separatorBuilder: (_, index) {
+            return SizedBox(
+              height: 16.0,
+            );
+          },
+        ),
       ),
     );
   }

@@ -39,8 +39,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return DefaultLayout(
       bottomNavigationBar: null,
-      backgroundColor: PRIMARY_COlOR,
-      title: '',
+      backgroundColor: Colors.white,
+      title: 'my Delivery app',
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(

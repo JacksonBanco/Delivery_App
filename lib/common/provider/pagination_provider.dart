@@ -2,6 +2,7 @@ import 'package:actual/common/model/cursor_pagination_model.dart';
 import 'package:actual/common/model/model_with_id.dart';
 import 'package:actual/common/model/pagination_params.dart';
 import 'package:actual/common/repository/base_pagination_repository.dart';
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PaginationProvider<
